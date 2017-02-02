@@ -25,19 +25,19 @@ app.use(bodyParser.json())
 var carajo;
 
 function base64_encode(file) {
+
 	// read binary data
 	var bitmap = fs.readFileSync(file);
 	// convert binary data to base64 encoded string
 	return new Buffer(bitmap).toString('base64');
 }
 
-
-var formData = {
+function ocrDetector(imageURL, sender) {
+	var formData = {
 	//75765aae-8a65-4eeb-9ada-d026ed5c0291
-
 	apikey: 'dd5e679c-3e9b-4ee6-ab4c-9db34501fb66',
 	mode: 'document_photo',
-	file: fs.createReadStream('image.jpg')
+	file : request(imageURL).pipe(fs.createWriteStream('image.jpg'))
 };
 
 var options = {
@@ -58,23 +58,26 @@ function callback(error, response, body) {
 			// console.log(info)
 			console.log(body)
 			carajo = body
-
+			sendTextMessage(sender, body);
 		} else {
 			carajo = "Erro nessa porra";
 			console.log('Problema no OCR')
+			sendTextMessage(sender, "Deu erro na imagem");
 		}
 	}
 
 	request(options, callback);
 
-
-
-
-// Index Route
-app.get('/', function(req, res) {
+	// Index Route
+	app.get('/', function(req, res) {
 	//res.send('Olá, Eu sou um bot' + body)
 	res.send(carajo);
 })
+
+}
+
+
+
 
 // para verificacao do Facebook
 app.get('/webhook/', function(req, res) {
@@ -111,15 +114,16 @@ app.post('/webhook/', function (req, res) {
 			let text = event.message.text
 			sendTextMessage(sender, "Texto recebido foi: " + text.substring(0, 200))
 		} 
-		 else if (event.message.attachments) {
-     		if (event.message.attachments[0].type === "image"){
-     		var imageURL = event.message.attachments[0].payload.url;
-     		console.log(imageURL);
-     		sendTextMessage(sender, "Me mandou foto aqui ?" + imageURL)
-     		}
-		 }
-}
-res.sendStatus(200)
+		else if (event.message.attachments) {
+			if (event.message.attachments[0].type === "image"){
+				var imageURL = event.message.attachments[0].payload.url;
+				console.log(imageURL);
+				sendTextMessage(sender, "Me mandou foto aqui ?" + imageURL)
+				ocrDetector(imageURL)
+			}
+		}
+	}
+	res.sendStatus(200)
 })
 
 

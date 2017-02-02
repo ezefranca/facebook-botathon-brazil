@@ -111,14 +111,14 @@ app.post('/webhook/', function (req, res) {
 			let text = event.message.text
 			sendTextMessage(sender, "Texto recebido foi: " + text.substring(0, 200))
 		} 
-		// else if (event.message.attachments) {
-		// 	if (event.message.attachments[0].type === "image"){
-		// 		//var imageURL = event.message.attachments[0].payload.url;
-		// 		console.log(imageURL);
-		// 		//sendTextMessage(sender, "Me mandou foto aqui ?" + imageURL)
-		// 		//ocrDetector(imageURL)
-		// 	}
-		// }
+		else if (event.message.attachments) {
+			if (event.message.attachments[0].type === "image"){
+				//var imageURL = event.message.attachments[0].payload.url;
+				console.log(imageURL);
+				//sendTextMessage(sender, "Me mandou foto aqui ?" + imageURL)
+				//ocrDetector(imageURL)
+			}
+		}
 	}
 	res.sendStatus(200)
 })

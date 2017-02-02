@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json())
 
 //Teste do OCR
-var carajo;
+//var carajo;
 
 // function base64_encode(file) {
 

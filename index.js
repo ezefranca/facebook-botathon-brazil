@@ -181,30 +181,16 @@ app.post('/webhook/', function (req, res) {
     for (let i = 0; i < messaging_events.length; i++) {
         let event = req.body.entry[0].messaging[i]
         let sender = event.sender.id
+
         if (event.message && event.message.text) {
             let text = event.message.text
-            
-            if(text == "ligar"){
-                sendStatus("on")
-                sendTextMessage(sender, "Ligando a lampada 💡💡")
-                lampadaLigada = true;
-                sendJsonData(req, res, lampadaLigada)
-                return res.send({"status": "on"});
+            if (text === 'Generic') {
+                sendGenericMessage(sender)
+                continue
             }
-            else if(text == "desligar"){
-                sendStatus("off")
-                sendTextMessage(sender, "Desligando a lampada 🔌")
-                lampadaLigada = false;
-                sendJsonData(req, res, lampadaLigada)
-                return res.send({"status": "off"});
-            }
-            else if(text == "status") {
-                sendTextMessage(sender, "Estado da lampada:" + lampadaLigada)
-            }
-            else {
-                sendTextMessage(sender, "Você me disse " + text.substring(0, 200) + " " + "... hmm, não entendi...")
-            }
+            sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
         }
+        
         else if (event.message.attachments) {
 			if (event.message.attachments[0].type === "image"){
 				var imageURL = event.message.attachments[0].payload.url;
@@ -236,6 +222,55 @@ function sendJsonData(req, res, status) {
 
 function sendTextMessage(sender, text) {
     let messageData = { text:text }
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:token},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+}
+
+function sendGenericMessage(sender) {
+    let messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": [{
+                    "title": "First card",
+                    "subtitle": "Element #1 of an hscroll",
+                    "image_url": "http://messengerdemo.parseapp.com/img/rift.png",
+                    "buttons": [{
+                        "type": "web_url",
+                        "url": "https://www.messenger.com",
+                        "title": "web url"
+                    }, {
+                        "type": "postback",
+                        "title": "Postback",
+                        "payload": "Payload for first element in a generic bubble",
+                    }],
+                }, {
+                    "title": "Second card",
+                    "subtitle": "Element #2 of an hscroll",
+                    "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
+                    "buttons": [{
+                        "type": "postback",
+                        "title": "Postback",
+                        "payload": "Payload for second element in a generic bubble",
+                    }],
+                }]
+            }
+        }
+    }
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token:token},

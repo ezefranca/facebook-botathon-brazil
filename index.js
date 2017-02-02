@@ -92,6 +92,8 @@ app.post('/webhook/', function (req, res) {
         if (event.message && event.message.text) {
             let text = event.message.text
             sendTextMessage(sender, "Texto recebido foi: " + text.substring(0, 200))
+        } else if (event.message && event.message.image) {
+        	sendTextMessage(sender, "Mandou uma imagem")
         }
     }
     res.sendStatus(200)

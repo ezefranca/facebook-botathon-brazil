@@ -111,13 +111,13 @@ app.post('/webhook/', function (req, res) {
 			let text = event.message.text
 			sendTextMessage(sender, "Texto recebido foi: " + text.substring(0, 200))
 		} 
-		else if (event.message.attachments) {
-    		if (atts[0].type === "image"){
-    		var imageURL = atts[0].payload.url;
-    		console.log(imageURL);
-    		sendTextMessage(sender, "Me mandou foto aqui ?" + imageURL)
-    		}
-		}
+		// else if (event.message.attachments) {
+  //   		if (atts[0].type === "image"){
+  //   		var imageURL = atts[0].payload.url;
+  //   		console.log(imageURL);
+  //   		sendTextMessage(sender, "Me mandou foto aqui ?" + imageURL)
+  //   		}
+		// }
 }
 res.sendStatus(200)
 })

@@ -32,12 +32,12 @@ function base64_encode(file) {
 	return new Buffer(bitmap).toString('base64');
 }
 
-function ocrDetector(imageURL, sender) {
+function ocrDetector(imageURL) {
 	var formData = {
 	//75765aae-8a65-4eeb-9ada-d026ed5c0291
 	apikey: 'dd5e679c-3e9b-4ee6-ab4c-9db34501fb66',
 	mode: 'document_photo',
-	file : request(imageURL).pipe(fs.createWriteStream('image.jpg'))
+	file: fs.createReadStream('image.jpg')
 };
 
 var options = {
@@ -57,12 +57,11 @@ function callback(error, response, body) {
 		console.log('Enviado OCR')
 			// console.log(info)
 			console.log(body)
-			carajo = body
-			sendTextMessage(sender, body);
+			sendTextMessage(carajo, body);
 		} else {
 			carajo = "Erro nessa porra";
 			console.log('Problema no OCR')
-			sendTextMessage(sender, "Deu erro na imagem");
+			sendTextMessage(carajo, "Deu erro na imagem");
 		}
 	}
 
@@ -107,6 +106,7 @@ app.post('/webhook/', function (req, res) {
 	for (let i = 0; i < messaging_events.length; i++) {
 		let event = req.body.entry[0].messaging[i]
 		let sender = event.sender.id
+		carajo = sender
 		if (event.message && event.message.text) {
 			let text = event.message.text
 			sendTextMessage(sender, "Texto recebido foi: " + text.substring(0, 200))

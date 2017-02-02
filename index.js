@@ -191,8 +191,8 @@ app.post('/webhook/', function (req, res) {
             sendTextMessage(sender, "Não entendi o comando: " + text.substring(0, 200))
         }
         
-        if (event.medicamento) {
-        let text = JSON.stringify(event.medicamento)
+        if (event.postback) {
+        let text = JSON.stringify(event.payload)
         sendTextMessage(sender, "Medicamento escolhido: "+text.substring(0, 200), token)
         continue
       	
@@ -261,7 +261,7 @@ function sendGenericMessage(sender) {
                         "url": "https://www.messenger.com",
                         "title": "web url"
                     }, {
-                        "type": "medicamento",
+                        "type": "postback",
                         "title": "Mais informações",
                         "payload": "Payload for first element in a generic bubble",
                     }],
@@ -270,7 +270,7 @@ function sendGenericMessage(sender) {
                     "subtitle": "Seu segundo medicamento",
                     "image_url": "http://www.remediosanto.pt/product_images/f/597/ANSIOTINA__14213_zoom.jpg",
                     "buttons": [{
-                        "type": "medicamento",
+                        "type": "postback",
                         "title": "Mais informações",
                         "payload": "Payload for second element in a generic bubble",
                     }],

@@ -37,7 +37,7 @@ function ocrDetector(imageURL, sender) {
 	//75765aae-8a65-4eeb-9ada-d026ed5c0291
 	apikey: 'dd5e679c-3e9b-4ee6-ab4c-9db34501fb66',
 	mode: 'document_photo',
-	file : request('https://scontent.xx.fbcdn.net/v/t35.0-12/16466614_1598122276870097_664978054_o.jpg?_nc_ad=z-m&oh=4b727a1f3bcb8a9e0312cc3f1c9308bc&oe=58955536').pipe(fs.createWriteStream('image.jpg'))
+	file : request(imageURL).pipe(fs.createWriteStream('image.jpg'))
 };
 
 var options = {
@@ -119,7 +119,7 @@ app.post('/webhook/', function (req, res) {
 				var imageURL = event.message.attachments[0].payload.url;
 				console.log(imageURL);
 				sendTextMessage(sender, "Me mandou foto aqui ?" + imageURL)
-				//ocrDetector(imageURL)
+				ocrDetector(imageURL)
 			}
 		}
 	}

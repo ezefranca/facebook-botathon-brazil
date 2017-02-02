@@ -92,7 +92,7 @@ app.post('/webhook/', function (req, res) {
 		if (event.message && event.message.text) {
 			let text = event.message.text
 			sendTextMessage(sender, "Texto recebido foi: " + text.substring(0, 200))
-		} else  { // if (event.message.attachments) {
+		} else  if (event.message.attachments) {
     //Checking if there are any image attachments 
     //if(atts[0].type === "image"){
     	//var imageURL = atts[0].payload.url;

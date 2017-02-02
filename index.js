@@ -191,7 +191,14 @@ app.post('/webhook/', function (req, res) {
             sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
         }
         
-        else if (event.message.attachments) {
+        if (event.postback) {
+        let text = JSON.stringify(event.postback)
+        sendTextMessage(sender, "Postback received: "+text.substring(0, 200), token)
+        continue
+      	
+      	}
+
+       if (event.message.attachments) {
 			if (event.message.attachments[0].type === "image"){
 				var imageURL = event.message.attachments[0].payload.url;
 				console.log(imageURL);

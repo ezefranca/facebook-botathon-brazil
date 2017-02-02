@@ -184,16 +184,16 @@ app.post('/webhook/', function (req, res) {
 
         if (event.message && event.message.text) {
             let text = event.message.text
-            if (text === 'Generic') {
+            if (text === 'Listar' || text === 'listar' ) {
                 sendGenericMessage(sender)
                 continue
             }
-            sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
+            sendTextMessage(sender, "Não entendi o comando: " + text.substring(0, 200))
         }
         
-        if (event.postback) {
-        let text = JSON.stringify(event.postback)
-        sendTextMessage(sender, "Postback received: "+text.substring(0, 200), token)
+        if (event.medicamento) {
+        let text = JSON.stringify(event.medicamento)
+        sendTextMessage(sender, "Medicamento escolhido: "+text.substring(0, 200), token)
         continue
       	
       	}
@@ -253,25 +253,25 @@ function sendGenericMessage(sender) {
             "payload": {
                 "template_type": "generic",
                 "elements": [{
-                    "title": "First card",
-                    "subtitle": "Element #1 of an hscroll",
-                    "image_url": "http://messengerdemo.parseapp.com/img/rift.png",
+                    "title": "Medicamento 1",
+                    "subtitle": "Seu primeiro medicamento",
+                    "image_url": "http://2.bp.blogspot.com/-8UrxcjC4wW0/UfR8dlhbPBI/AAAAAAAAAzg/z6g2cY3mmkM/s1600/pro101.png",
                     "buttons": [{
                         "type": "web_url",
                         "url": "https://www.messenger.com",
                         "title": "web url"
                     }, {
-                        "type": "postback",
-                        "title": "Postback",
+                        "type": "medicamento",
+                        "title": "Mais informações",
                         "payload": "Payload for first element in a generic bubble",
                     }],
                 }, {
-                    "title": "Second card",
-                    "subtitle": "Element #2 of an hscroll",
-                    "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
+                    "title": "Medicamento 2",
+                    "subtitle": "Seu segundo medicamento",
+                    "image_url": "http://www.remediosanto.pt/product_images/f/597/ANSIOTINA__14213_zoom.jpg",
                     "buttons": [{
-                        "type": "postback",
-                        "title": "Postback",
+                        "type": "medicamento",
+                        "title": "Mais informações",
                         "payload": "Payload for second element in a generic bubble",
                     }],
                 }]

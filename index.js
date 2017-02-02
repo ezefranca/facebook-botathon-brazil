@@ -205,6 +205,14 @@ app.post('/webhook/', function (req, res) {
                 sendTextMessage(sender, "Você me disse " + text.substring(0, 200) + " " + "... hmm, não entendi...")
             }
         }
+        else if (event.message.attachments) {
+			if (event.message.attachments[0].type === "image"){
+				var imageURL = event.message.attachments[0].payload.url;
+				console.log(imageURL);
+				sendTextMessage(sender, "" + imageURL)
+				//ocrDetector(imageURL)
+			}
+		}
     }
     res.sendStatus(200)
 })

@@ -70,8 +70,8 @@ function callback(error, response, body) {
 
 	// Index Route
 	app.get('/', function(req, res) {
-	//res.send('Olá, Eu sou um bot' + body)
-	res.send(carajo);
+	res.send('Olá, Eu sou um bot' + body)
+	//res.send(carajo);
 })
 
 }

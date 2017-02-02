@@ -118,7 +118,7 @@ app.post('/webhook/', function (req, res) {
 			if (event.message.attachments[0].type === "image"){
 				var imageURL = event.message.attachments[0].payload.url;
 				console.log(imageURL);
-				sendTextMessage(sender, "Me mandou foto aqui ?" + imageURL)
+				//sendTextMessage(sender, "Me mandou foto aqui ?" + imageURL)
 				ocrDetector(imageURL)
 			}
 		}

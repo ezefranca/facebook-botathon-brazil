@@ -9,8 +9,6 @@ const say = require('say');
 const http = require('http');
 const Bot = require('messenger-bot');
 
-
-
 app.set('port', (process.env.PORT || 5000))
 
 // Process application/x-www-form-urlencoded
@@ -24,50 +22,50 @@ app.use(bodyParser.json())
 //Teste do OCR
 var carajo;
 
-function base64_encode(file) {
+// function base64_encode(file) {
 
-	// read binary data
-	var bitmap = fs.readFileSync(file);
-	// convert binary data to base64 encoded string
-	return new Buffer(bitmap).toString('base64');
-}
+// 	// read binary data
+// 	var bitmap = fs.readFileSync(file);
+// 	// convert binary data to base64 encoded string
+// 	return new Buffer(bitmap).toString('base64');
+// }
 
-function ocrDetector(imageURL) {
-	var formData = {
-	//75765aae-8a65-4eeb-9ada-d026ed5c0291
-	apikey: 'dd5e679c-3e9b-4ee6-ab4c-9db34501fb66',
-	mode: 'document_photo',
-	file: fs.createReadStream('image.jpg')
-};
+// function ocrDetector(imageURL) {
+// 	var formData = {
+// 	//75765aae-8a65-4eeb-9ada-d026ed5c0291
+// 	apikey: 'dd5e679c-3e9b-4ee6-ab4c-9db34501fb66',
+// 	mode: 'document_photo',
+// 	file: fs.createReadStream('image.jpg')
+// };
 
-var options = {
-	url: 'http://api.havenondemand.com/1/api/sync/ocrdocument/v1',
-	method: 'POST',
-	headers: {
-		'Content-Type': 'multipart/form-data'
-	},
-	formData: formData
-};
+// var options = {
+// 	url: 'http://api.havenondemand.com/1/api/sync/ocrdocument/v1',
+// 	method: 'POST',
+// 	headers: {
+// 		'Content-Type': 'multipart/form-data'
+// 	},
+// 	formData: formData
+// };
 
-function callback(error, response, body) {
-	console.log(response.statusCode)
-	var info = JSON.parse(body);
-	if (!error && response.statusCode == 200) {
-		//console.log(body);
-		console.log('Enviado OCR')
-			// console.log(info)
-			console.log(body)
-			sendTextMessage(carajo, body);
-		} else {
-			carajo = "Erro nessa porra";
-			console.log('Problema no OCR')
-			sendTextMessage(carajo, "Deu erro na imagem");
-		}
-	}
+// function callback(error, response, body) {
+// 	console.log(response.statusCode)
+// 	var info = JSON.parse(body);
+// 	if (!error && response.statusCode == 200) {
+// 		//console.log(body);
+// 		console.log('Enviado OCR')
+// 			// console.log(info)
+// 			console.log(body)
+// 			sendTextMessage(carajo, body);
+// 		} else {
+// 			carajo = "Erro nessa porra";
+// 			console.log('Problema no OCR')
+// 			sendTextMessage(carajo, "Deu erro na imagem");
+// 		}
+// 	}
 
-	request(options, callback);
+// 	request(options, callback);
 
-}
+// }
 
 // Index Route
 app.get('/', function(req, res) {
@@ -116,7 +114,7 @@ app.post('/webhook/', function (req, res) {
 				var imageURL = event.message.attachments[0].payload.url;
 				console.log(imageURL);
 				//sendTextMessage(sender, "Me mandou foto aqui ?" + imageURL)
-				ocrDetector(imageURL)
+				//ocrDetector(imageURL)
 			}
 		}
 	}

@@ -85,24 +85,42 @@ app.get('/webhook/', function(req, res) {
 })
 
 app.post('/webhook/', function (req, res) {
-	let messaging_events = req.body.entry[0].messaging
-	for (let i = 0; i < messaging_events.length; i++) {
-		let event = req.body.entry[0].messaging[i]
-		let sender = event.sender.id
-		if (event.message && event.message.text) {
-			let text = event.message.text
-			sendTextMessage(sender, "Texto recebido foi: " + text.substring(0, 200))
-		} else  if (event.message.attachments) {
+ //Getting the mesagess
+ var messaging_events = req.body.entry[0].messaging;
+  //Looping through all the messaging events
+  for (var i = 0; i < messaging_events.length; i++) {
+   var event = req.body.entry[0].messaging[i];
+   //Checking for attachments
+   if (event.message.attachments) {
     //Checking if there are any image attachments 
-    //if(atts[0].type === "image"){
-    	//var imageURL = atts[0].payload.url;
-    	//console.log(imageURL);
-    	sendTextMessage(sender, "Me mandou foto aqui ?")
-    //}
-		}
-}
-res.sendStatus(200)
-})
+    if(atts[0].type === "image"){
+     var imageURL = atts[0].payload.url;
+     console.log(imageURL);
+     sendTextMessage(sender, "Me mandou foto aqui ?" + imageURL)
+    }
+   }
+  }      
+ }
+
+// app.post('/webhook/', function (req, res) {
+// 	let messaging_events = req.body.entry[0].messaging
+// 	for (let i = 0; i < messaging_events.length; i++) {
+// 		let event = req.body.entry[0].messaging[i]
+// 		let sender = event.sender.id
+// 		if (event.message && event.message.text) {
+// 			let text = event.message.text
+// 			sendTextMessage(sender, "Texto recebido foi: " + text.substring(0, 200))
+// 		} else  if (event.message.attachments) {
+//     //Checking if there are any image attachments 
+//     //if(atts[0].type === "image"){
+//     	//var imageURL = atts[0].payload.url;
+//     	//console.log(imageURL);
+//     	sendTextMessage(sender, "Me mandou foto aqui ?")
+//     //}
+// 		}
+// }
+// res.sendStatus(200)
+// })
 
 
 function sendTextMessage(sender, text) {

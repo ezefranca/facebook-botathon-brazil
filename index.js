@@ -113,10 +113,10 @@ app.post('/webhook/', function (req, res) {
 		} 
 		else if (event.message.attachments) {
 			if (event.message.attachments[0].type === "image"){
-				var imageURL = event.message.attachments[0].payload.url;
+				//var imageURL = event.message.attachments[0].payload.url;
 				console.log(imageURL);
-				sendTextMessage(sender, "Me mandou foto aqui ?" + imageURL)
-				ocrDetector(imageURL)
+				//sendTextMessage(sender, "Me mandou foto aqui ?" + imageURL)
+				//ocrDetector(imageURL)
 			}
 		}
 	}

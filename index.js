@@ -68,16 +68,13 @@ function callback(error, response, body) {
 
 	request(options, callback);
 
+}
+
 	// Index Route
 	app.get('/', function(req, res) {
 	res.send('Olá, Eu sou um bot' + body)
-	//res.send(carajo);
+	res.send(carajo);
 })
-
-}
-
-
-
 
 // para verificacao do Facebook
 app.get('/webhook/', function(req, res) {

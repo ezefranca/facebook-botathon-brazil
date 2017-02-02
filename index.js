@@ -56,16 +56,16 @@ function callback(error, response, body) {
 		//console.log(body);
 		console.log('Enviado OCR')
 			// console.log(info)
-		console.log(body)
-		carajo = body
+			console.log(body)
+			carajo = body
 
-	} else {
-		carajo = "Erro nessa porra";
-		console.log('Problema no OCR')
+		} else {
+			carajo = "Erro nessa porra";
+			console.log('Problema no OCR')
+		}
 	}
-}
 
-request(options, callback);
+	request(options, callback);
 
 
 
@@ -85,37 +85,43 @@ app.get('/webhook/', function(req, res) {
 })
 
 app.post('/webhook/', function (req, res) {
-    let messaging_events = req.body.entry[0].messaging
-    for (let i = 0; i < messaging_events.length; i++) {
-        let event = req.body.entry[0].messaging[i]
-        let sender = event.sender.id
-        if (event.message && event.message.text) {
-            let text = event.message.text
-            sendTextMessage(sender, "Texto recebido foi: " + text.substring(0, 200))
-        } else if (event.message && event.message.image) {
-        	sendTextMessage(sender, "Mandou uma imagem")
-        }
+	let messaging_events = req.body.entry[0].messaging
+	for (let i = 0; i < messaging_events.length; i++) {
+		let event = req.body.entry[0].messaging[i]
+		let sender = event.sender.id
+		if (event.message && event.message.text) {
+			let text = event.message.text
+			sendTextMessage(sender, "Texto recebido foi: " + text.substring(0, 200))
+		} else    if (event.message.attachments) {
+    //Checking if there are any image attachments 
+    if(atts[0].type === "image"){
+    	var imageURL = atts[0].payload.url;
+    	console.log(imageURL);
+    	sendTextMessage(sender, "Processando a imagem ...")
     }
-    res.sendStatus(200)
+}
+}
+res.sendStatus(200)
 })
 
+
 function sendTextMessage(sender, text) {
-    let messageData = { text:text }
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:token},
-        method: 'POST',
-        json: {
-            recipient: {id:sender},
-            message: messageData,
-        }
-    }, function(error, response, body) {
-        if (error) {
-            console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-        }
-    })
+	let messageData = { text:text }
+	request({
+		url: 'https://graph.facebook.com/v2.6/me/messages',
+		qs: {access_token:token},
+		method: 'POST',
+		json: {
+			recipient: {id:sender},
+			message: messageData,
+		}
+	}, function(error, response, body) {
+		if (error) {
+			console.log('Error sending messages: ', error)
+		} else if (response.body.error) {
+			console.log('Error: ', response.body.error)
+		}
+	})
 }
 
 const token = "EAAFbjmAUdLUBAPzqBqW8BiaW2K8HmpGL9vCMyEWHCAaBpQvmCdLgYgAKlC9gTUcfAO0z9geKQWgNTS2fUXLmbXIiKYCcxPJCjwJLEIic0kyFDwmFd1clecvztayXEdoYOx1TRnhA3QkXKhseoB9LTjafAHLG9cwIv6Ga0wZDZD"

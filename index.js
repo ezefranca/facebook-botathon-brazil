@@ -30,42 +30,7 @@
 // // 	return new Buffer(bitmap).toString('base64');
 // // }
 
-// // function ocrDetector(imageURL) {
-// // 	var formData = {
-// // 	//75765aae-8a65-4eeb-9ada-d026ed5c0291
-// // 	apikey: 'dd5e679c-3e9b-4ee6-ab4c-9db34501fb66',
-// // 	mode: 'document_photo',
-// // 	file: fs.createReadStream('image.jpg')
-// // };
 
-// // var options = {
-// // 	url: 'http://api.havenondemand.com/1/api/sync/ocrdocument/v1',
-// // 	method: 'POST',
-// // 	headers: {
-// // 		'Content-Type': 'multipart/form-data'
-// // 	},
-// // 	formData: formData
-// // };
-
-// // function callback(error, response, body) {
-// // 	console.log(response.statusCode)
-// // 	var info = JSON.parse(body);
-// // 	if (!error && response.statusCode == 200) {
-// // 		//console.log(body);
-// // 		console.log('Enviado OCR')
-// // 			// console.log(info)
-// // 			console.log(body)
-// // 			sendTextMessage(carajo, body);
-// // 		} else {
-// // 			carajo = "Erro nessa porra";
-// // 			console.log('Problema no OCR')
-// // 			sendTextMessage(carajo, "Deu erro na imagem");
-// // 		}
-// // 	}
-
-// // 	request(options, callback);
-
-// // }
 
 // // Index Route
 // app.get('/', function(req, res) {
@@ -175,6 +140,43 @@ app.get('/webhook/', function (req, res) {
 app.listen(app.get('port'), function() {
     console.log('running on port', app.get('port'))
 })
+
+function ocrDetector(imageURL) {
+	
+	var formData = {
+		//75765aae-8a65-4eeb-9ada-d026ed5c0291
+		apikey: 'dd5e679c-3e9b-4ee6-ab4c-9db34501fb66',
+		mode: 'document_photo',
+		file: fs.createReadStream('image.jpg')
+	};
+
+	var options = {
+		url: 'http://api.havenondemand.com/1/api/sync/ocrdocument/v1',
+		method: 'POST',
+		headers: {
+			'Content-Type': 'multipart/form-data'
+		},
+		formData: formData
+	};
+
+	request(options, callback);
+}
+
+function callback(error, response, body) {
+	console.log(response.statusCode)
+	var info = JSON.parse(body);
+	if (!error && response.statusCode == 200) {
+		//console.log(body);
+		console.log('Enviado OCR')
+			// console.log(info)
+		console.log(body)
+		sendTextMessage(carajo, body);
+	} else {
+			//carajo = "Erro nessa porra";
+		console.log('Problema no OCR')
+		sendTextMessage(carajo, "Deu erro na imagem");
+	}
+}
 
 app.post('/webhook/', function (req, res) {
     let messaging_events = req.body.entry[0].messaging
